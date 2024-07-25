@@ -1,15 +1,14 @@
-
-
-    
-
-
-
-
+from http import client
+from logging import info
 import discord
 import random
 import os
 import requests
 from discord.ext import commands
+
+from flask import Flask, jsonify
+from flask_restful import Resource, Api
+
 
 intents = discord.Intents.default()
 intents.message_content = True
@@ -96,5 +95,58 @@ async def duck(ctx):
     '''duck komutunu çağırdığımızda, program ordek_resmi_urlsi_al fonksiyonunu çağırır.'''
     image_url = get_duck_image_url()
     await ctx.send(image_url)
+
+def tlk():    
+    url = 'https://randomfox.ca/floof/'
+    res = requests.get(url)
+    data = res.json()
+    return data['image']
+
+
+@bot.command('tilki')
+async def tilki(ctx):
+    '''duck komutunu çağırdığımızda, program ordek_resmi_urlsi_al fonksiyonunu çağırır.'''
+    image_url = tlk()
+    await ctx.send(image_url)
+
+
+
+@bot.command('Pokemon')
+async def rp(ctx):
+  ranpoke = random.randint(1, 905)
+  url = "https://pokeapi.co/api/v2/pokemon/"
+  secs = 5
+
+  try:
+    r = requests.get(f"{url}{ranpoke}")
+    packages_json = r.json()
+    packages_json.keys
+
+    napo = packages_json["name"]
+
+    embed = discord.Embed(title = "Bu olur mu ?", color = discord.Color.random())
+    embed.set_image(url = f"https://play.pokemonshowdown.com/sprites/ani/{napo}.gif")
+    await ctx.send(embed = embed)
+
+    
+
+    def check(msg):
+      return msg.author == ctx.author and msg.channel == ctx.channel
+
+    user_ans = await client.wait_for("message", check=check)
+
+
+    if user_ans == napo:
+      await ctx.send("You are correct! :)")
+    elif user_ans != napo:
+      await ctx.send(f"You are incorrect :v\nThe answer is {napo}")
+
+  except:
+    await ctx.send(":) Haha")
+
+
+
+
+
 
 bot.run("")
