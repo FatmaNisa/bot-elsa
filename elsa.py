@@ -65,6 +65,15 @@ async def resim(ctx):
     await ctx.send(file=fatma)
 
 @bot.command()
+async def resimler(ctx):
+    ihtimal=[0.10,0.30,0.60]
+    n=random.choices(os.listdir("resimler"),weights=ihtimal,k=1) [0]
+    with open(f"resimler/{n}","rb")as r:
+        fatma=discord.File(r)
+    await ctx.send(file=fatma)
+
+
+@bot.command()
 async def resim1(ctx):
     with open(f"resimler/resim1.png","rb")as r:
         fatma=discord.File(r)
@@ -108,7 +117,6 @@ async def tilki(ctx):
     '''duck komutunu çağırdığımızda, program ordek_resmi_urlsi_al fonksiyonunu çağırır.'''
     image_url = tlk()
     await ctx.send(image_url)
-
 
 
 @bot.command('Pokemon')
